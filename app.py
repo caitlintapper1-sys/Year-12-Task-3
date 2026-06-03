@@ -1,4 +1,12 @@
-import flask
-import importlib
+from flask import Flask
 
-print(importlib.metadata.version("flask"))
+#create the web host app (?? seems important don't touch)
+app = Flask(__name__)
+
+#route for test homepage
+@app.route("/")
+def home():
+    return "Hello, World!"
+
+#starts the website IMPORTANT don't touch
+app.run(debug=True, port=5000)
