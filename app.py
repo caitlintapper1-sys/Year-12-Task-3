@@ -1,12 +1,14 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, session
+import sqlite3
 
 #create the web host app (?? seems important don't touch)
 app = Flask(__name__)
 
 #route for test homepage
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
-    return "Hello, World!"
+    #makes it load the base.html template
+    return render_template('menu.html')
 
 #starts the website IMPORTANT don't touch
 app.run(debug=True, port=5000)
