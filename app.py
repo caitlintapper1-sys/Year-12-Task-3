@@ -8,6 +8,10 @@ app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
 def home():
     #makes it load the base.html template
+    return render_template('game.html')
+
+@app.route("/menu", methods=['GET', 'POST'])
+def menu():
     return render_template('menu.html')
 
 #starts the website IMPORTANT don't touch
