@@ -72,3 +72,13 @@ table {
     z-index: 3;
     margin: 0.4rem 0.8rem;
 }
+
+.menu-game-buttons {
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    width: 80%;
+    height: 70vh;
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
