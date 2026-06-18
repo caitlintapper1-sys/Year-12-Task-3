@@ -80,5 +80,21 @@ table {
     width: 80%;
     height: 70vh;
     padding-top: 10%;
-    padding-bottom: 10%;
 }
+
+.menu-game-button {
+    margin: 1% 10% 15% 10% ;
+    padding: 0.5% 1%;
+    font-size: 3rem;
+    border: medium solid white;
+    border-radius: 0.8rem;
+    text-align: center;
+    background-color: white;
+    color: rgb(114, 114, 114);
+}
+
+.menu-game-button:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+

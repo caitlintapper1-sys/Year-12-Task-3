@@ -12,11 +12,8 @@ def home():
 
 @app.route("/menu", methods=['GET', 'POST'])
 def menu():
-    return render_template('menu.html')
-
-@app.route("/menu_game", methods=['GET','POST'])
-def menu_game():
     return render_template('menu_game.html')
+
 
 #starts the website IMPORTANT don't touch
 app.run(debug=True, port=5000)
