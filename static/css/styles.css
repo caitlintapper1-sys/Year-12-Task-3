@@ -1,3 +1,4 @@
+/* container for the content of each menu page */
 .menu-page-container {
     width: 90%;
     background-color: rgba(255, 255, 255, 0.5);
@@ -11,7 +12,7 @@
     max-width: 20%;
     text-align: right;
     vertical-align: top;
-    padding: 4% 0 0 0;
+    padding: 3% 0 0 0;
 }
 
 .menu-table {
@@ -47,6 +48,7 @@
     height: 100%;
 }
 
+/* from stackoverflow.com, solves issue where webpage had added blank sections above & below */
 html, body {
     height: 100%;
     width: 100%;
@@ -57,6 +59,7 @@ table {
     border-collapse: collapse;
 }
 
+/* button to close menu */
 .exit-menu {
     color: white;
     text-decoration: none;
@@ -66,6 +69,7 @@ table {
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
+/* button to open menu */
 .menu-icon {
     max-width: 5%;
     position: absolute;
@@ -73,6 +77,8 @@ table {
     margin: 0.4rem 0.8rem;
 }
 
+/* for menu game page */
+/* div that allows the menu buttons to be positioned */
 .menu-game-buttons {
     position: absolute;
     text-align: center;
@@ -80,6 +86,8 @@ table {
     width: 80%;
     height: 70vh;
     padding-top: 10%;
+    /* fixes problem where it inherits white-space: nowrap and the buttons are positioned in a row rather than a column */
+    white-space: initial;
 }
 
 .menu-game-button {
@@ -98,3 +106,52 @@ table {
     color: white;
 }
 
+/* for menu clues & inventory sections */
+.menu-name {
+color: white;
+text-shadow: 0 0 0.1em black;
+font-weight: bold;
+margin: 1% 1rem 0 1rem;
+}
+
+.menu-description {
+color: white;
+text-shadow: 0 0 0.1em black;
+margin: 0 1rem 1% 1rem;
+}
+
+.menu-line {
+    border: thin solid white;
+    width: 90%;
+}
+
+/* from stackoverflow.com, allows divs to be scrollable instead of spilling onto main page */
+.menu-page-content {
+    overflow-y: auto;
+    word-break: keep-all;
+    white-space: nowrap;
+    max-height: 90vh;
+}
+
+/* from stackoverflow.com, hides the scrollbar */
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+/* for menu inventory section */
+.inventory-div {
+    display: flex;   
+    margin: 1rem;
+}
+
+.inventory-info-div {
+    display: block;
+    margin-top: 0;
+}
+
+.item-image {
+    min-width: fit-content;
+    height: 15vh;
+    margin-right: 0;
+}

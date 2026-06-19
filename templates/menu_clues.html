@@ -1,0 +1,14 @@
+{% extends "menu.html" %}
+
+{% block menu_content %}
+
+<!-- shows for each clue currently found/'unlocked', from photojournal tutorial on Teams -->
+{% for i in range(1, 6) %}
+<!-- add code to check which clues are marked T in the database, only show those -->
+
+    <h1 class="menu-name">Name of Clue</h1>
+    <p class="menu-description">Details / description of clue</p>
+    <hr class="menu-line">
+
+{% endfor %}
+{% endblock %}

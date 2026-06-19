@@ -2,17 +2,19 @@
 
 {% block content %}
     <div>
+        <!-- helps with menu positioning -->
         <table class="menu-table">
             <tr class="menu-table-row">
                 <td class="menu-button-container">
+                        <!-- 'onclick' done by referencing stackoverflow.com -->
                         <div><button name="button-game" class="menu-button" onclick="location.href='menu'">Game</button></div>
-                        <div><button name="button-clues" class="menu-button">Clues</button></div>
-                        <div><button name="button-inventory" class="menu-button">Inventory</button></div>
-                        <div><button name="button-dialogue" class="menu-button">Dialogue</button></div>
+                        <div><button name="button-clues" class="menu-button" onclick="location.href='menu_clues'">Clues</button></div>
+                        <div><button name="button-inventory" class="menu-button" onclick="location.href='menu_inventory'">Inventory</button></div>
                 </td>
                 <td class="menu-page-container">
+                    <!-- button to close menu -->
                     <a class="exit-menu" href="{{ url_for('home') }}">X</a>
-                    <div>
+                    <div class="menu-page-content">
                         {% block menu_content %}{% endblock %}
                     </div>
                 </td>
