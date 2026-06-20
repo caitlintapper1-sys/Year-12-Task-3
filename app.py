@@ -4,25 +4,28 @@ import sqlite3
 #create the web host app (?? seems important don't touch)
 app = Flask(__name__)
 
-#route for test homepage
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    #makes it load the main.html template
-    return render_template('main.html')
+started = False
 
-#route for menu, opens on 'game' tab by default
-@app.route("/menu", methods=['GET', 'POST'])
-def menu():
-    return render_template('menu_game.html')
-#route for clues tab in menu
-@app.route("/menu_clues", methods=['GET','POST'])
-def menu_clues():
-    return render_template('menu_clues.html')
+#default route
+@app.route("/")
+def default():
+       #redirects to start page
+       return redirect(url_for('start'))
 
-#route for inventory tab in menu
-@app.route("/menu_inventory", methods=['GET', 'POST'])
-def menu_inventory():
-    return render_template('menu_inventory.html')
+#route for starting page
+@app.route("/start", methods=['GET', 'POST'])
+def start():
+        return render_template('start.html')
+
+#route for tutorial/explanation
+@app.route("/tutorial")
+def tutorial():
+      return render_template('tutorial.html')
+
+#route for the first investigation section        
+@app.route("/apartment")
+def apartment():
+       return render_template('apartment.html')
 
 
 #starts the website IMPORTANT don't touch
