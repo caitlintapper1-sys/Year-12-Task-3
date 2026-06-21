@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icons/placeholder-icon.png') }}">
         <meta name="theme-color" content="#000000">
+        <!-- from geeksforgeeks.org -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
         <!-- button to open menu -->
@@ -72,18 +74,20 @@
             </div>
         </div>
 
+        <button class="next-location-button">End investigation</button>
+
         <!-- referenced from stackoverflow.com -->
         <map name="apartment-map">
-            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue()">
-            <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="openMenu()">
-            <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="openMenu()">
-            <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="openMenu()">
-            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="openMenu()">
-            <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="openMenu()">
-            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="openMenu()">
-            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="openMenu()">
-            <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="openMenu()">
-            <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="openMenu()">
+            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue(); sendID(2)">
+            <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="showDialogue(); sendID(3)">
+            <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="showDialogue(); sendID(4)">
+            <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="showDialogue(); sendID(5)">
+            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="showDialogue()">
+            <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="showDialogue(); sendID(6)">
+            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendID(7)">
+            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendID(8)">
+            <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="showDialogue(); sendID(9)">
+            <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="showDialogue(); sendID(9)">
         </map>
 
     </body>
@@ -133,6 +137,14 @@
             openGame()
         }
 
+        function sendID(num) {
+            $.ajax({
+                url: '/process',
+                type: 'POST',
+                data: { 'data': num },
+            });
+
+        }
     </script>
 </html>
 

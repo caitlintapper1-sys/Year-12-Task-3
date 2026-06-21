@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response, send_from_directory, jsonify
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,7 +30,7 @@ def tutorial():
       return render_template('tutorial.html')
 
 #route for the first investigation section        
-@app.route("/apartment")
+@app.route("/apartment", methods=['GET','POST'])
 def apartment():
        db = get_db()
        #gets all clues the user has unlocked
@@ -40,8 +40,21 @@ def apartment():
        #gets all items the user has unlocked
        items = db.execute(f'''SELECT * FROM items 
                             WHERE obtained == 'T'
-                            ORDER BY id ASC''',).fetchall()
+                            ORDER BY id ASC''',).fetchall()      
+
        return render_template('apartment.html', clues=clues, items=items)
+
+@app.route('/process', methods=['POST'])
+def process():
+    db = get_db()
+    id = request.form.get('data')
+    db.execute(f'''UPDATE clues SET obtained = "T" WHERE id = {int(id)}''',)
+    db.commit()
+    redirect(render_template('apartment.html'))
+    return id
+    
+
+
 
 
 
