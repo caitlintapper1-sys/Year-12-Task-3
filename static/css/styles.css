@@ -1,7 +1,7 @@
 /* container for the content of each menu page */
 .menu-page-container {
     width: 90%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     height: 90%;
     border: thick solid white;
     border-left-width: 3vh;
@@ -20,7 +20,7 @@
     margin: 2.5% 12% 2.5% 8%;
     width: 80%;
     height: 90vh;
-    z-index: 2;
+    z-index: 3;
     border: none;
 }
 
@@ -50,9 +50,10 @@
 
 /* from stackoverflow.com, solves issue where webpage had added blank sections above & below */
 html, body {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vh;
     margin: 0;
+
 }
 
 table {
@@ -117,8 +118,9 @@ margin: 1% 1rem 0 1rem;
 
 .menu-description {
 color: white;
-text-shadow: 0 0 0.1em black;
+text-shadow: 0 0 0.3em black;
 margin: 0 1rem 1% 1rem;
+text-wrap: auto;
 }
 
 .menu-line {
@@ -155,4 +157,53 @@ margin: 0 1rem 1% 1rem;
     min-width: fit-content;
     height: 15vh;
     margin-right: 0;
+}
+
+/* for dialogue pop-up */
+.dialogue-div {
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.dialogue-box {
+    width: 95%;
+    height: 25%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    z-index: 2;
+    margin-top: 74vh;
+    margin-left: 2.5%;
+}
+
+.character-sprite {
+    width: fit-content;
+    height: 90vh;
+    margin-top: 10vh;
+    position: absolute;
+    z-index: 1;
+}
+
+.dialogue-text {
+    color: white;
+    font-size: 2rem;
+    margin: 1rem;
+    margin-left: 1.5rem;
+    margin-right: 0;
+    width: 93%;
+    display: inline-block;
+}
+
+.next-dialogue-button {
+    position: absolute;
+    background: none;
+    color: white;
+    border: none;
+    /* margin-left: 97%; */
+    font-size: 2.5rem;
+    text-align: right;
+    display: inline;
+    margin-top: 0.5%;
+    margin-left: 1%;
 }

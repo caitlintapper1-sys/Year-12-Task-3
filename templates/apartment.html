@@ -12,7 +12,7 @@
     <body>
         <!-- button to open menu -->
         <image class="menu-icon" src="{{ url_for('static',filename='images/icons/menu.png') }}" onclick="openMenu()"></image>
-        <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/test-background.jpg') }}"></image>
+        <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/apartment-background.webp') }}" usemap="#apartment-map"></image>
         <!-- menu -->
         <div id="menu-screen" style="display:none">
             <!-- helps with menu positioning -->
@@ -20,9 +20,9 @@
                 <tr class="menu-table-row">
                     <td class="menu-button-container">
                             <!-- 'onclick' done by referencing stackoverflow.com -->
-                            <div><button name="button-game" class="menu-button" onclick="openGame()">Game</button></div>
-                            <div><button name="button-clues" class="menu-button" onclick="openClues()">Clues</button></div>
-                            <div><button name="button-inventory" class="menu-button" onclick="openInventory()">Inventory</button></div>
+                            <div><button id="button-game" class="menu-button" onclick="openGame()">Game</button></div>
+                            <div><button id="button-clues" class="menu-button" onclick="openClues()">Clues</button></div>
+                            <div><button id="button-inventory" class="menu-button" onclick="openInventory()">Inventory</button></div>
                     </td>
                     <td class="menu-page-container">
                         <!-- button to close menu -->
@@ -36,23 +36,23 @@
                             </div>
                             <div id="menu-clues" style="display:none">
                                 <!-- shows for each clue currently found/'unlocked', from photojournal tutorial on Teams -->
-                                {% for i in range(1, 6) %}
+                                {% for clue in clues %}
                                 <!-- add code to check which clues are marked T in the database, only show those -->
 
-                                    <h1 class="menu-name">Name of Clue</h1>
-                                    <p class="menu-description">Details / description of clue</p>
+                                    <h1 class="menu-name">{{clue.name}}</h1>
+                                    <p class="menu-description">{{clue.description}}</p>
                                     <hr class="menu-line">
 
                                 {% endfor %}
                             </div>
                             <div id="menu-inventory" style="display:none">
-                                {% for i in range(1, 6) %}
+                                {% for item in items %}
                                     <div class="inventory-div">
                                         <!-- placeholder image -->
-                                        <image class="item-image" src="{{ url_for('static', filename='images/icons/placeholder-icon.png') }}"></image>
+                                        <image class="item-image" src="{{ url_for('static', filename=item.image_path) }}"></image>
                                         <div class="inventory-info-div">
-                                            <h1 class="menu-name">Name of item</h1>
-                                            <p class="menu-description">Details/description of clue</p>
+                                            <h1 class="menu-name">{{item.name}}</h1>
+                                            <p class="menu-description">{{item.description}}</p>
                                         </div>
                                     </div>
                                     <hr class="menu-line">
@@ -63,14 +63,35 @@
                 </tr>
             </table>
         </div>
+        <!-- dialogue box -->
+        <div id="dialogue-div" class="dialogue-div" style="display:none">
+            <image class="character-sprite" src="{{ url_for('static',filename='images/sprites/placeholder-for-testing.webp') }}"></image>
+            <div class="dialogue-box">
+                <p class="dialogue-text">"Test"</p>
+                <button class="next-dialogue-button" onclick="hideDialogue()">></button>
+            </div>
+        </div>
 
+        <!-- referenced from stackoverflow.com -->
+        <map name="apartment-map">
+            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue()">
+            <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="openMenu()">
+            <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="openMenu()">
+            <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="openMenu()">
+            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="openMenu()">
+            <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="openMenu()">
+            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="openMenu()">
+            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="openMenu()">
+            <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="openMenu()">
+            <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="openMenu()">
+        </map>
 
     </body>
     <script>
         function openMenu() {
             document.getElementById("menu-screen").style.display = "block";
+            openGame()
         }
-
         function closeMenu() {
             document.getElementById("menu-screen").style.display = "none";
         }
@@ -79,19 +100,39 @@
             document.getElementById("menu-game").style.display = "block";
             document.getElementById("menu-clues").style.display = "none";
             document.getElementById("menu-inventory").style.display = "none";
+            ButtonHover('button-game','button-clues','button-inventory')
         }
-
         function openClues() {
             document.getElementById("menu-clues").style.display = "block";
             document.getElementById("menu-game").style.display = "none";
             document.getElementById("menu-inventory").style.display = "none";
+            ButtonHover('button-clues','button-game','button-inventory')
         }
-
         function openInventory() {
             document.getElementById("menu-inventory").style.display = "block";
             document.getElementById("menu-clues").style.display = "none";
             document.getElementById("menu-game").style.display = "none";
+            ButtonHover('button-inventory','button-clues','button-game')
         }
+
+        function ButtonHover(id1, id2, id3){
+            document.getElementById(id1).style.backgroundColor = "white";
+            document.getElementById(id1).style.color = "darkgrey";
+            document.getElementById(id2).style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+            document.getElementById(id2).style.color = "white";
+            document.getElementById(id3).style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+            document.getElementById(id3).style.color = "white";
+        }
+
+        function showDialogue() {
+            document.getElementById("dialogue-div").style.display = "block";
+            openGame()
+        }
+        function hideDialogue() {
+            document.getElementById("dialogue-div").style.display = "none";
+            openGame()
+        }
+
     </script>
 </html>
 

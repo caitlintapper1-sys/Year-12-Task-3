@@ -1,10 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response, send_from_directory
 import sqlite3
+import os
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from datetime import datetime
 
-#create the web host app (?? seems important don't touch)
+#create the web host app 
 app = Flask(__name__)
 
-started = False
+def get_db():
+    db = sqlite3.connect('database/task3.db', timeout = 15)
+    db.row_factory = sqlite3.Row
+    return db
 
 #default route
 @app.route("/")
@@ -25,7 +32,22 @@ def tutorial():
 #route for the first investigation section        
 @app.route("/apartment")
 def apartment():
-       return render_template('apartment.html')
+       db = get_db()
+       #gets all clues the user has unlocked
+       clues = db.execute(f'''SELECT * FROM clues 
+                            WHERE obtained == 'T'
+                            ORDER BY id ASC''',).fetchall()
+       #gets all items the user has unlocked
+       items = db.execute(f'''SELECT * FROM items 
+                            WHERE obtained == 'T'
+                            ORDER BY id ASC''',).fetchall()
+       return render_template('apartment.html', clues=clues, items=items)
+
+
+
+
+#XMLHttp request!! something with that and Javascript and JSON(?) 
+#look at the cat movie thingy's code trust
 
 
 #starts the website IMPORTANT don't touch

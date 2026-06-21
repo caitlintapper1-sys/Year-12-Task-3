@@ -5,10 +5,14 @@ description TEXT NOT NULL,
 obtained TEXT DEFAULT 'F'
 );
 
-CREATE TABLE IF NOT EXISTS item (
+CREATE TABLE IF NOT EXISTS items (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
 description TEXT NOT NULL, 
 image_path TEXT NOT NULL,
 obtained TEXT DEFAULT 'F'
 );
+
+UPDATE clues, 
+SET obtained = "T", 
+WHERE id = ?
