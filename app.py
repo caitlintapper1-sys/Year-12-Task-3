@@ -22,6 +22,9 @@ def default():
 #route for starting page
 @app.route("/start", methods=['GET', 'POST'])
 def start():
+        db = get_db()
+        db.execute(f'''UPDATE clues SET obtained = "T" WHERE id > 1''',)
+        db.commit()
         return render_template('start.html')
 
 #route for tutorial/explanation
@@ -53,7 +56,9 @@ def process():
     redirect(render_template('apartment.html'))
     return id
     
-
+@app.route('/next')
+def next():
+    return render_template('template.html')
 
 
 

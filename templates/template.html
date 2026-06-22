@@ -14,7 +14,7 @@
     <body>
         <!-- button to open menu -->
         <image class="menu-icon" src="{{ url_for('static',filename='images/icons/menu.png') }}" onclick="openMenu()"></image>
-        <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/apartment-background.png') }}" usemap="#apartment-map"></image>
+        <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/test-background.jpg') }}" usemap="#apartment-map"></image>
         <!-- menu -->
         <div id="menu-screen" style="display:none">
             <!-- helps with menu positioning -->
@@ -70,11 +70,11 @@
             <image class="character-sprite" src="{{ url_for('static',filename='images/sprites/placeholder-for-testing.webp') }}"></image>
             <div class="dialogue-box">
                 <p class="dialogue-text">"Test"</p>
-                <button class="next-dialogue-button" onclick="hideDialogue(); location.href='apartment'">></button>
+                <button class="next-dialogue-button" onclick="hideDialogue()">></button>
             </div>
         </div>
 
-        <button class="next-location-button" onclick="location.href='next'">End investigation</button>
+        <button class="next-location-button">End investigation</button>
 
         <!-- referenced from stackoverflow.com -->
         <map name="apartment-map">
