@@ -13,6 +13,3 @@ image_path TEXT NOT NULL,
 obtained TEXT DEFAULT 'F'
 );
 
-UPDATE clues, 
-SET obtained = "T", 
-WHERE id = ?

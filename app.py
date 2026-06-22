@@ -23,7 +23,7 @@ def default():
 @app.route("/start", methods=['GET', 'POST'])
 def start():
         db = get_db()
-        db.execute(f'''UPDATE clues SET obtained = "T" WHERE id > 1''',)
+        db.execute(f'''UPDATE clues SET obtained = "F" WHERE id > 1''',)
         db.commit()
         return render_template('start.html')
 
@@ -43,7 +43,7 @@ def apartment():
        #gets all items the user has unlocked
        items = db.execute(f'''SELECT * FROM items 
                             WHERE obtained == 'T'
-                            ORDER BY id ASC''',).fetchall()      
+                            ORDER BY id ASC''',).fetchall()   
 
        return render_template('apartment.html', clues=clues, items=items)
 

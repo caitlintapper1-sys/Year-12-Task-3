@@ -73,19 +73,22 @@
                 <button class="next-dialogue-button" onclick="hideDialogue(); location.href='apartment'">></button>
             </div>
         </div>
-
-        <button class="next-location-button" onclick="location.href='next'">End investigation</button>
+        <!-- button to go to next place -->
+        <div class="next-buttons">
+            <button class="next-location-button" onclick="location.href='next'">End investigation</button>
+            <button id="button" class="next-location-button" onclick="location.href='next'" style="display:none">Warn the target</button>
+        </div>
 
         <!-- referenced from stackoverflow.com -->
         <map name="apartment-map">
-            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue(); sendID(2)">
+            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue(); sendID(2);">
             <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="showDialogue(); sendID(3)">
             <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="showDialogue(); sendID(4)">
             <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="showDialogue(); sendID(5)">
             <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="showDialogue()">
             <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="showDialogue(); sendID(6)">
-            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendID(7)">
-            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendID(8)">
+            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendID(7); showButton()">
+            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendID(8); showButton()">
             <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="showDialogue(); sendID(9)">
             <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="showDialogue(); sendID(9)">
         </map>
@@ -144,6 +147,10 @@
                 data: { 'data': num },
             });
 
+        }
+
+        function showButton(){
+            document.getElementById("button").style.display = "block";
         }
     </script>
 </html>
