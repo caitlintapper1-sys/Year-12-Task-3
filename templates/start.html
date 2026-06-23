@@ -11,7 +11,7 @@
     </head>
     <body>
         <!-- button to open menu -->
-        <image class="menu-icon" src="{{ url_for('static',filename='images/icons/menu.png') }}" onclick="openMenu()"></image>
+        <image class="menu-icon" src="{{ url_for('static',filename='images/icons/menu.png') }}"></image>
         <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/test-background.jpg') }}"></image>
         <!-- menu -->
         <div id="menu-screen" style="display:block">
@@ -21,12 +21,8 @@
                     <td class="menu-button-container">
                             <!-- 'onclick' done by referencing stackoverflow.com -->
                             <div><button name="button-game" class="menu-button" onclick="openGame()">Game</button></div>
-                            <div><button name="button-clues" class="menu-button" onclick="openClues()">Clues</button></div>
-                            <div><button name="button-inventory" class="menu-button" onclick="openInventory()">Inventory</button></div>
                     </td>
                     <td class="menu-page-container">
-                        <!-- button to close menu -->
-                        <a class="exit-menu" onclick="closeMenu()">X</a>
                         <div class="menu-page-content">
                             <div id="menu-game" style="display:block">
                                 <div class="menu-game-buttons">
@@ -36,57 +32,13 @@
                                     <image class="" src="{{ url_for('static',filename='images/icons/placeholder-icon.png') }}"></image>
                                 </div>
                             </div>
-                            <div id="menu-clues" style="display:none">
-                                <h1 class="menu-name">Name of Clue</h1>
-                                <p class="menu-description">Details / description of clue</p>
-                                <hr class="menu-line">
-                            </div>
-                            <div id="menu-inventory" style="display:none">
-                                <div class="inventory-div">
-                                    <!-- placeholder image -->
-                                    <image class="item-image" src="{{ url_for('static', filename='images/icons/placeholder-icon.png') }}"></image>
-                                    <div class="inventory-info-div">
-                                        <h1 class="menu-name">Name of item</h1>
-                                        <p class="menu-description">Details/description of clue</p>
-                                    </div>
-                                </div>
-                                <hr class="menu-line">
-                            </div>
                         </div>
                     </td>
                 </tr>
             </table>
         </div>
-
-
     </body>
     <script>
-        //referenced stackoverflow.com for how to hide/show sections
-        function openMenu() {
-            document.getElementById("menu-screen").style.display = "block";
-        }
-
-        function closeMenu() {
-            document.getElementById("menu-screen").style.display = "none";
-        }
-
-        function openGame() {
-            document.getElementById("menu-game").style.display = "block";
-            document.getElementById("menu-clues").style.display = "none";
-            document.getElementById("menu-inventory").style.display = "none";
-        }
-
-        function openClues() {
-            document.getElementById("menu-clues").style.display = "block";
-            document.getElementById("menu-game").style.display = "none";
-            document.getElementById("menu-inventory").style.display = "none";
-        }
-
-        function openInventory() {
-            document.getElementById("menu-inventory").style.display = "block";
-            document.getElementById("menu-clues").style.display = "none";
-            document.getElementById("menu-game").style.display = "none";
-        }
     </script>
 </html>
 

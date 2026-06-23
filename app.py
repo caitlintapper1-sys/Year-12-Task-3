@@ -35,18 +35,29 @@ def tutorial():
 #route for the first investigation section        
 @app.route("/apartment", methods=['GET','POST'])
 def apartment():
-       db = get_db()
-       #gets all clues the user has unlocked
-       clues = db.execute(f'''SELECT * FROM clues 
-                            WHERE obtained == 'T'
-                            ORDER BY id ASC''',).fetchall()
-       #gets all items the user has unlocked
-       items = db.execute(f'''SELECT * FROM items 
-                            WHERE obtained == 'T'
-                            ORDER BY id ASC''',).fetchall()   
+        db = get_db()
+        #gets all clues the user has unlocked
+        clues = db.execute(f'''SELECT * FROM clues 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #gets all items the user has unlocked
+        items = db.execute(f'''SELECT * FROM items 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #checks if one of 2 clues is found
+        clue1, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 7''',).fetchone()
+        clue2, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 8''',).fetchone()
+        #shows the associated button if one of the clues is found
+        if clue1 == 'T' or clue2 == 'T':
+            showbutton = True
+        else:
+            showbutton = False
 
-       return render_template('apartment.html', clues=clues, items=items)
+        return render_template('apartment.html', clues=clues, items=items, showbutton=showbutton)
 
+#lets the javascript make changes to the SQL
 @app.route('/process', methods=['POST'])
 def process():
     db = get_db()
@@ -56,11 +67,15 @@ def process():
     redirect(render_template('apartment.html'))
     return id
     
-@app.route('/next')
-def next():
-    return render_template('template.html')
+#route for the 2nd investigation section
+@app.route('/station')
+def station():
+    return render_template('station.html')
 
-
+#route for the 3rd investigation section
+@app.route('/alleyway')
+def alleyway():
+    return render_template('alleyway.html')
 
 
 
