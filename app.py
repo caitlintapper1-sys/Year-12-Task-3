@@ -25,6 +25,12 @@ def start():
         db = get_db()
         db.execute(f'''UPDATE clues SET obtained = "F" WHERE id > 1''',)
         db.commit()
+        db.execute(f'''UPDATE dialogue SET show = "no" WHERE id == 1''',)
+        db.commit()
+        db.execute(f'''UPDATE items SET obtained = "F"''',)
+        db.commit()
+        db.execute(f'''UPDATE puzzles SET solved = "unsolved"''',)
+        db.commit()
         return render_template('start.html')
 
 #route for tutorial/explanation
@@ -62,35 +68,46 @@ def apartment():
         #checks if the puzzle is solved or not
         safeCode, = db.execute(f'''SELECT solved FROM puzzles
                                 WHERE id == 1''',).fetchone()
-        targetCode = db.execute(f'''SELECT solved FROM puzzles
+        targetCode, = db.execute(f'''SELECT solved FROM puzzles
                                 WHERE id == 2''',).fetchone()
         #prevents code from running if the puzzle is already solved
-        if safeCode != 'solved' and targetCode != 'solved':
-            #gets the users answer for the puzzle 
+        if safeCode != 'solved' or targetCode != 'solved':
             if request.method == 'POST':
                 #prevents issues if the puzzle hasn't been answered
                 try:
+                    #gets the users answer for the puzzle 
                     safeCodeGuess = request.form['safe']
-                    print(safeCodeGuess)
                     #checks if the answer is correct and updates sql
                     if int(safeCodeGuess) == 2947:
                         db.execute(f'''UPDATE puzzles SET solved = 'solved' WHERE id = 1''',)
                         db.commit()
-                        print('testing')
                         safeCode = 'solved'
                 except:
                     safeCodeGuess = 0
                 try:
+                    #gets the users answer for the puzzle 
                     targetNameGuess = request.form['target']
                     #checks if the answer is correct and updates sql
                     if targetNameGuess.lower() == 'the commissioner':
                         db.execute(f'''UPDATE puzzles SET solved = 'solved' WHERE id = 2''',)
                         db.commit()
-                        targetCode = 'solved'
+                        return redirect(url_for('station'))
                 except:
                     targetNameGuess = ''
 
-        return render_template('apartment.html', clues=clues, items=items, showbutton=showbutton, safeCode=safeCode, targetCode=targetCode)
+        #checks if dialogue should be shown
+        showDialogue, = db.execute(f'''SELECT show FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #gets the dialogue that needs to be shown
+        dialogueContent, = db.execute(f'''SELECT dialoguecontent FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #prevents dialogue from showing again if the page reloads
+        db.execute(f'''UPDATE dialogue SET show = "no" WHERE id = 1''',)
+        db.commit()
+
+        openSafe, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 10''',).fetchone()
+        return render_template('apartment.html', clues=clues, items=items, openSafe=openSafe, safeCode=safeCode, showbutton=showbutton, showDialogue=showDialogue, dialogueContent=dialogueContent)
 
 #updates SQL to say a clue is obtained when the user clicks it
 @app.route('/processClue', methods=['POST'])
@@ -101,7 +118,14 @@ def processClue():
     #updates SQL
     db.execute(f'''UPDATE clues SET obtained = "T" WHERE id = {int(id)}''',)
     db.commit()
+    #indicates dialogue needs to be shown
+    db.execute(f'''UPDATE dialogue SET show = "yes" WHERE id = 1''',)
+    db.commit()
+    #gets dialogue from file
     d = open('static/dialogue/apartment-dialogue-clues.txt').read()
+    #puts dialogue into sql so the main page can access it
+    db.execute(f'''UPDATE dialogue SET dialoguecontent = "{d}" WHERE id = 1''',)
+    db.commit()
     
     return d
 
@@ -113,6 +137,16 @@ def processItem():
     id = request.form.get('data')
     #updates SQL
     db.execute(f'''UPDATE items SET obtained = "T" WHERE id = {int(id)}''',)
+    db.commit()
+     #indicates dialogue needs to be shown
+    db.execute(f'''UPDATE dialogue SET show = "yes" WHERE id = 1''',)
+    db.commit()
+
+    
+    #gets dialogue from file
+    d = open('static/dialogue/apartment-dialogue-clues.txt').read()
+    #puts dialogue into sql so the main page can access it
+    db.execute(f'''UPDATE dialogue SET dialoguecontent = "{d}" WHERE id = 1''',)
     db.commit()
     return id
     

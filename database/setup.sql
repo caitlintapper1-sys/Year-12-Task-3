@@ -20,6 +20,7 @@ solved TEXT DEFAULT 'unsolved'
 );
 
 CREATE TABLE IF NOT EXISTS dialogue (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
 show TEXT DEFAULT 'no',
 dialoguecontent TEXT
 );

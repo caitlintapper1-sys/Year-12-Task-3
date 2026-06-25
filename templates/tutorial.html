@@ -10,7 +10,33 @@
         <meta name="theme-color" content="#000000">
     </head>
     <body>
-        <p>tutorial (not written yet)</p>
-        <button class="start-game-button" onclick="location.href='apartment'">Start</button>
+        <image class="menu-icon" src="{{ url_for('static',filename='images/icons/menu.png') }}"></image>
+        <image class="background-image" src="{{ url_for('static', filename='images/backgrounds/test-background.jpg') }}"></image>
+        <!-- menu -->
+        <div id="menu-screen" style="display:block">
+            <!-- helps with menu positioning -->
+            <table class="tutorial-table">
+                <tr class="menu-table-row">
+                    <td class="tutorial-page-container">
+                        <div class="menu-page-content">
+                            <div id="menu-game" style="display:block">
+                                <div class="tutorial-content">
+                                    <p class="tutorial-text">
+                                        "Detective Montoya's apartment was broken into last night at around 2:13 AM, leaving the detective missing and suspected to have been murdered during the break-in, the culprit remains unknown and at large. <br>
+                                        It's your job as a detective to find the culprit and stop them."
+                                    </p>
+                                    <p class="tutorial-text"><em>
+                                        Investigate the crime scene by clicking on potential clues that could help solve the case.<br>
+                                        Use the menu in the top-left of the screen to look over the clues you've found at any point during the game.<br>
+                                        Make choices and solve puzzles to determine what ending you get!
+                                    </em></p>
+                                    <button class="tutorial-button" onclick="location.href='apartment'">Start Game</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>
