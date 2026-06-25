@@ -69,8 +69,8 @@
         <div id="dialogue-div" class="dialogue-div" style="display:none">
             <image class="character-sprite" src="{{ url_for('static',filename='images/sprites/placeholder-for-testing.webp') }}"></image>
             <div class="dialogue-box">
-                <p class="dialogue-text">"Test"</p>
-                <button class="next-dialogue-button" onclick="hideDialogue(); location.href='alleyway'">></button>
+                <p class="dialogue-text">{{dialogueContent}}</p>
+                <button class="next-dialogue-button" onclick="hideDialogue()">></button>
             </div>
         </div>
         <!-- buttons to go to next place -->
@@ -83,15 +83,20 @@
         {% if showbutton == True %}
             <script>document.getElementById("hidden-button").style.display = "block";</script>
         {% endif %}
+
+        <!-- chceks if dialogue should be showing and shows it -->
+        {% if showDialogue == 'yes' %}
+            <script>document.getElementById("dialogue-div").style.display = "block";</script>
+        {% endif %}
     
 
         <!-- referenced from stackoverflow.com -->
         <!-- clickable areas image map -->
         <map name="alleyway-map">
-            <area name="dumpster" shape="poly" coords="817, 399, 1035, 350, 1116, 362, 1120, 639, 880, 642, 815, 587" onclick="showDialogue(); sendClueID(15);">
-            <area name="arkham-newspaper" shape="rect" coords="768, 113, 863, 267" onclick="showDialogue(); sendClueID(16)">
-            <area name="robin-newspaper" shape="rect" coords="556, 362, 634, 467" onclick="showDialogue(); sendClueID(17)">
-            <area name="station-door" shape="rect" coords="434, 180, 466, 628" onclick="showDialogue(); sendClueID(18)">
+            <area name="dumpster" shape="poly" coords="817, 399, 1035, 350, 1116, 362, 1120, 639, 880, 642, 815, 587" onclick="sendClueID(15); location.href='alleyway'">
+            <area name="arkham-newspaper" shape="rect" coords="768, 113, 863, 267" onclick="sendClueID(16); location.href='alleyway'">
+            <area name="robin-newspaper" shape="rect" coords="556, 362, 634, 467" onclick="sendClueID(17); location.href='alleyway'">
+            <area name="station-door" shape="rect" coords="434, 180, 466, 628" onclick="sendClueID(18); location.href='alleyway'">
         </map>
 
     </body>

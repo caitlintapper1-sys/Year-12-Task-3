@@ -69,8 +69,8 @@
         <div id="dialogue-div" class="dialogue-div" style="display:none">
             <image class="character-sprite" src="{{ url_for('static',filename='images/sprites/placeholder-for-testing.webp') }}"></image>
             <div class="dialogue-box">
-                <p class="dialogue-text">"Test"</p>
-                <button class="next-dialogue-button" onclick="hideDialogue(); location.href='station'">></button>
+                <p class="dialogue-text">{{dialogueContent}}</p>
+                <button class="next-dialogue-button" onclick="hideDialogue()">></button>
             </div>
         </div>
         <!-- buttons to go to next place -->
@@ -83,16 +83,21 @@
         {% if showbutton == True %}
             <script>document.getElementById("hidden-button").style.display = "block";</script>
         {% endif %}
+
+        <!-- chceks if dialogue should be showing and shows it -->
+        {% if showDialogue == 'yes' %}
+            <script>document.getElementById("dialogue-div").style.display = "block";</script>
+        {% endif %}
     
 
         <!-- referenced from stackoverflow.com -->
         <!-- clickable areas image map -->
         <map name="station-map">
-            <area name="map" shape="rect" coords="417, 140, 582, 282" onclick="showDialogue(); sendClueID(11);">
-            <area name="screwdriver" shape="rect" coords="684, 374, 800, 432" onclick="showDialogue(); sendItemID(2)">
-            <area name="open-book" shape="rect" coords="811, 547, 913, 619" onclick="showDialogue(); sendClueID(12)">
-            <area name="computer-message" shape="rect" coords="1006, 301, 1206, 722" onclick="showDialogue(); sendClueID(13)">
-            <area name="clock" shape="circle" coords="1063, 84, 63" onclick="showDialogue(); sendClueID(14)">
+            <area name="map" shape="rect" coords="417, 140, 582, 282" onclick="sendClueID(11); location.href='station'">
+            <area name="screwdriver" shape="rect" coords="684, 374, 800, 432" onclick="sendItemID(2); location.href='station'">
+            <area name="open-book" shape="rect" coords="811, 547, 913, 619" onclick="sendClueID(12); location.href='station'">
+            <area name="computer-message" shape="rect" coords="1006, 301, 1206, 722" onclick="sendClueID(13); location.href='station'">
+            <area name="clock" shape="circle" coords="1063, 84, 63" onclick="sendClueID(14); location.href='station'">
         </map>
 
     </body>
@@ -134,11 +139,6 @@
             document.getElementById(id3).style.color = "white";
         }
 
-        //shows/hides dialogue box
-        function showDialogue() {
-            document.getElementById("dialogue-div").style.display = "block";
-            openGame()
-        }
         function hideDialogue() {
             document.getElementById("dialogue-div").style.display = "none";
             openGame()

@@ -8,6 +8,11 @@ from datetime import datetime
 #create the web host app 
 app = Flask(__name__)
 
+clueDialogue = [['clue-1', 'clue-2', 'clue-3', 'clue-4', 'clue-5', 'clue-6', 'clue-7', 'clue-8', 'clue-9', 'clue-10'],
+                 ['clue-11', 'clue-12', 'clue-13', 'clue-14'],
+                 ['clue-15', 'clue-16', 'clue-17', 'clue-18']]
+
+
 def get_db():
     db = sqlite3.connect('database/task3.db', timeout = 15)
     db.row_factory = sqlite3.Row
@@ -38,10 +43,6 @@ def start():
 def tutorial():
       return render_template('tutorial.html')
 
-#sets variable default so they don't reset everytime the page reloads
-safeCode = 'unsolved'
-targetCode = 'unsolved'
-
 #route for the first investigation section        
 @app.route("/apartment", methods=['GET','POST'])
 def apartment():
@@ -70,6 +71,9 @@ def apartment():
                                 WHERE id == 1''',).fetchone()
         targetCode, = db.execute(f'''SELECT solved FROM puzzles
                                 WHERE id == 2''',).fetchone()
+        
+        showSafeDialogue = 'no'
+        placeholder = 'no'
         #prevents code from running if the puzzle is already solved
         if safeCode != 'solved' or targetCode != 'solved':
             if request.method == 'POST':
@@ -82,6 +86,17 @@ def apartment():
                         db.execute(f'''UPDATE puzzles SET solved = 'solved' WHERE id = 1''',)
                         db.commit()
                         safeCode = 'solved'
+                        db.execute(f'''UPDATE dialogue SET show = "yes" WHERE id = 1''',)
+                        db.commit()
+                        d = open(f'static/dialogue/item-1.txt').read()
+                        db.execute(f'''UPDATE dialogue SET dialoguecontent = "{d}" WHERE id = 1''',)
+                        db.commit()
+                        db.execute(f'''UPDATE items SET obtained = "T" WHERE id = 1''',)
+                        db.commit()
+                        placeholder = 'yes'
+                        showSafeDialogue = placeholder
+                        placeholder = 'no'
+                        return redirect(url_for('apartment'))
                 except:
                     safeCodeGuess = 0
                 try:
@@ -107,7 +122,7 @@ def apartment():
 
         openSafe, = db.execute(f'''SELECT obtained FROM clues
                                 WHERE id == 10''',).fetchone()
-        return render_template('apartment.html', clues=clues, items=items, openSafe=openSafe, safeCode=safeCode, showbutton=showbutton, showDialogue=showDialogue, dialogueContent=dialogueContent)
+        return render_template('apartment.html', clues=clues, items=items, openSafe=openSafe, safeCode=safeCode, showbutton=showbutton, showDialogue=showDialogue, dialogueContent=dialogueContent, showSafeDialogue=showSafeDialogue)
 
 #updates SQL to say a clue is obtained when the user clicks it
 @app.route('/processClue', methods=['POST'])
@@ -121,12 +136,21 @@ def processClue():
     #indicates dialogue needs to be shown
     db.execute(f'''UPDATE dialogue SET show = "yes" WHERE id = 1''',)
     db.commit()
+
+    id = int(id)
+
+    if id < 11:
+        dialogueFile = clueDialogue[0][id-1]
+    elif id < 15:
+        dialogueFile = clueDialogue[1][id-11]
+    else:
+        dialogueFile = clueDialogue[2][id-15]
+
     #gets dialogue from file
-    d = open('static/dialogue/apartment-dialogue-clues.txt').read()
+    d = open(f'static/dialogue/{dialogueFile}.txt').read()
     #puts dialogue into sql so the main page can access it
-    db.execute(f'''UPDATE dialogue SET dialoguecontent = "{d}" WHERE id = 1''',)
+    db.execute(f'''UPDATE dialogue SET dialoguecontent = '{d}' WHERE id = 1''',)
     db.commit()
-    
     return d
 
 #updates SQL to say an item is obtained when the user clicks/obtains it
@@ -142,13 +166,21 @@ def processItem():
     db.execute(f'''UPDATE dialogue SET show = "yes" WHERE id = 1''',)
     db.commit()
 
-    
+    id = int(id)
+
+    if id == 1:
+        dialogueFile = 'item-1'
+    elif id == 2:
+        dialogueFile = 'item-2'
+    else:
+        dialogueFile = 'item-3'
+
     #gets dialogue from file
-    d = open('static/dialogue/apartment-dialogue-clues.txt').read()
+    d = open(f'static/dialogue/{dialogueFile}.txt').read()
     #puts dialogue into sql so the main page can access it
-    db.execute(f'''UPDATE dialogue SET dialoguecontent = "{d}" WHERE id = 1''',)
+    db.execute(f'''UPDATE dialogue SET dialoguecontent = '{d}' WHERE id = 1''',)
     db.commit()
-    return id
+    return d
     
 #route for the 2nd investigation section
 @app.route('/station')
@@ -173,7 +205,17 @@ def station():
         else:
             showbutton = False
 
-        return render_template('station.html', clues=clues, items=items, showbutton=showbutton)
+        #checks if dialogue should be shown
+        showDialogue, = db.execute(f'''SELECT show FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #gets the dialogue that needs to be shown
+        dialogueContent, = db.execute(f'''SELECT dialoguecontent FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #prevents dialogue from showing again if the page reloads
+        db.execute(f'''UPDATE dialogue SET show = "no" WHERE id = 1''',)
+        db.commit()
+
+        return render_template('station.html', clues=clues, items=items, showbutton=showbutton, showDialogue=showDialogue, dialogueContent=dialogueContent)
 
 #route for the 3rd investigation section
 @app.route('/alleyway')
@@ -197,8 +239,18 @@ def alleyway():
             showbutton = True
         else:
             showbutton = False
+        
+        #checks if dialogue should be shown
+        showDialogue, = db.execute(f'''SELECT show FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #gets the dialogue that needs to be shown
+        dialogueContent, = db.execute(f'''SELECT dialoguecontent FROM dialogue
+                                WHERE id == 1''',).fetchone()
+        #prevents dialogue from showing again if the page reloads
+        db.execute(f'''UPDATE dialogue SET show = "no" WHERE id = 1''',)
+        db.commit()
 
-        return render_template('alleyway.html', clues=clues, items=items, showbutton=showbutton)
+        return render_template('alleyway.html', clues=clues, items=items, showbutton=showbutton, showDialogue=showDialogue, dialogueContent=dialogueContent)
 
 
 
