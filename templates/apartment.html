@@ -83,6 +83,26 @@
         {% if showbutton == True %}
             <script>document.getElementById("hidden-button").style.display = "block";</script>
         {% endif %}
+        
+        {% if targetCode == 'solved' %}
+            <p>testing</p>
+        {% endif %}
+
+        <!-- form for safe puzzle -->
+        <div class="form safe-form" id="safe-form" style="display:none">
+            <form method="post">
+                <input type="number" name="safe" required>
+                <button type="submit">Enter code</button>
+            </form>
+        </div>
+
+        <!-- form for target puzzle -->
+        <div class="form target-form" id="target-form" style="display:none">
+            <form method="post">
+                <input type="text" name="target" required>
+                <button type="submit">Enter target</button>
+            </form>
+        </div>
     
 
         <!-- referenced from stackoverflow.com -->
@@ -92,10 +112,10 @@
             <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="showDialogue(); sendClueID(3)">
             <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="showDialogue(); sendClueID(4)">
             <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="showDialogue(); sendClueID(5)">
-            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="showDialogue()">
+            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="showDialogue();sendClueID(10)">
             <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="showDialogue(); sendClueID(6)">
-            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendClueID(7); showButton()">
-            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendClueID(8); showButton()">
+            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendClueID(7)">
+            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendClueID(8)">
             <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="showDialogue(); sendClueID(9)">
             <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="showDialogue(); sendClueID(9)">
         </map>
@@ -152,11 +172,30 @@
         //sends the clue ID to the python so it can be changed in the database
         function sendClueID(num) {
             $.ajax({
-                url: '/process',
+                url: '/processClue',
                 type: 'POST',
                 data: { 'data': num },
             });
 
+        }
+
+        //sends the item ID to python so it can be changed in the database
+        function sendItemID(num) {
+            $.ajax({
+                url: '/processItem',
+                type: 'POST',
+                data: { 'data': num },
+            });
+
+        }
+        
+
+        function shoowSafeForm() {
+            document.getElementById("safe-form").style.display = "block";
+        }
+
+        function showTargetForm() {
+            document.getElementById("target-form").style.display = "block";
         }
     </script>
 </html>

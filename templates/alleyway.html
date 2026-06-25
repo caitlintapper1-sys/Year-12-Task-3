@@ -73,25 +73,30 @@
                 <button class="next-dialogue-button" onclick="hideDialogue(); location.href='alleyway'">></button>
             </div>
         </div>
+        <!-- buttons to go to next place -->
+        <div class="next-buttons">
+            <button id="hidden-button" class="next-location-button" onclick="location.href='station'" style="display:none">Warn the target</button>
+            <button class="next-location-button" onclick="location.href='alleyway'">End Investigation</button>
+        </div>
 
-        <button class="next-location-button">End investigation</button>
+        <!-- shows the 'warn the target' button if one of the correlating clues has been found -->
+        {% if showbutton == True %}
+            <script>document.getElementById("hidden-button").style.display = "block";</script>
+        {% endif %}
+    
 
         <!-- referenced from stackoverflow.com -->
+        <!-- clickable areas image map -->
         <map name="alleyway-map">
-            <area name="broken-window" shape="rect" coords="240, 147, 392, 316" onclick="showDialogue(); sendID(2)">
-            <area name="floor-scuffs" shape="rect" coords="364, 561, 659, 630" onclick="showDialogue(); sendID(3)">
-            <area name="bed-chemical" shape="rect" coords="631, 428, 695, 451" onclick="showDialogue(); sendID(4)">
-            <area name="blood-splatter" shape="rect" coords="814, 627, 1206, 722" onclick="showDialogue(); sendID(5)">
-            <area name="safe" shape="rect" coords="1336, 306, 1471, 380" onclick="showDialogue()">
-            <area name="computer-code" shape="rect" coords="1057, 286, 1167, 357" onclick="showDialogue(); sendID(6)">
-            <area name="commissioner-code" shape="rect" coords="965, 220, 1042, 283" onclick="showDialogue(); sendID(7)">
-            <area name="calander" shape="rect" coords="715, 268, 830, 351" onclick="showDialogue(); sendID(8)">
-            <area name="window-scuffs1" shape="rect" coords="397, 243, 430, 283" onclick="showDialogue(); sendID(9)">
-            <area name="window-scuffs2" shape="rect" coords="393, 389, 426, 461" onclick="showDialogue(); sendID(9)">
+            <area name="dumpster" shape="poly" coords="817, 399, 1035, 350, 1116, 362, 1120, 639, 880, 642, 815, 587" onclick="showDialogue(); sendClueID(15);">
+            <area name="arkham-newspaper" shape="rect" coords="768, 113, 863, 267" onclick="showDialogue(); sendClueID(16)">
+            <area name="robin-newspaper" shape="rect" coords="556, 362, 634, 467" onclick="showDialogue(); sendClueID(17)">
+            <area name="station-door" shape="rect" coords="434, 180, 466, 628" onclick="showDialogue(); sendClueID(18)">
         </map>
 
     </body>
     <script>
+        //opens and closes menu
         function openMenu() {
             document.getElementById("menu-screen").style.display = "block";
             openGame()
@@ -100,6 +105,7 @@
             document.getElementById("menu-screen").style.display = "none";
         }
 
+        //switches between menu pages
         function openGame() {
             document.getElementById("menu-game").style.display = "block";
             document.getElementById("menu-clues").style.display = "none";
@@ -118,7 +124,6 @@
             document.getElementById("menu-game").style.display = "none";
             ButtonHover('button-inventory','button-clues','button-game')
         }
-
         function ButtonHover(id1, id2, id3){
             document.getElementById(id1).style.backgroundColor = "white";
             document.getElementById(id1).style.color = "darkgrey";
@@ -128,6 +133,7 @@
             document.getElementById(id3).style.color = "white";
         }
 
+        //shows/hides dialogue box
         function showDialogue() {
             document.getElementById("dialogue-div").style.display = "block";
             openGame()
@@ -137,9 +143,10 @@
             openGame()
         }
 
-        function sendID(num) {
+        //sends the clue ID to the python so it can be changed in the database
+        function sendClueID(num) {
             $.ajax({
-                url: '/process',
+                url: '/processClue',
                 type: 'POST',
                 data: { 'data': num },
             });
@@ -147,4 +154,3 @@
         }
     </script>
 </html>
-

@@ -54,28 +54,104 @@ def apartment():
             showbutton = True
         else:
             showbutton = False
+        #gets the users answer for the puzzle 
+        safeCode = 'unsolved'
+        targetCode = 'unsolved'
+        if request.method == 'POST':
+            #prevents issues if the puzzle hasn't been answered
+            try:
+                safeCodeGuess = request.form['safe']
+            except:
+                safeCodeGuess = 0
+            try:
+                targetNameGuess = request.form['target']
+            except:
+                targetNameGuess = ''
+            #checks if the answer is correct
+            if safeCodeGuess == 2947:
+                safeCode = 'solved'
+            if targetNameGuess.lower() == 'the commissioner':
+                targetCode = 'solved'
 
-        return render_template('apartment.html', clues=clues, items=items, showbutton=showbutton)
+        return render_template('apartment.html', clues=clues, items=items, showbutton=showbutton, safeCode=safeCode, targetCode=targetCode)
 
-#lets the javascript make changes to the SQL
-@app.route('/process', methods=['POST'])
-def process():
+#updates SQL to say a clue is obtained when the user clicks it
+@app.route('/processClue', methods=['POST'])
+def processClue():
     db = get_db()
+    #gets id from javascript
     id = request.form.get('data')
+    #updates SQL
     db.execute(f'''UPDATE clues SET obtained = "T" WHERE id = {int(id)}''',)
     db.commit()
     redirect(render_template('apartment.html'))
+    return id
+
+#updates SQL to say an item is obtained when the user clicks/obtains it
+@app.route('/processItem', methods=['POST'])
+def processItem():
+    db = get_db()
+    #gets id from javascript
+    id = request.form.get('data')
+    #updates SQL
+    db.execute(f'''UPDATE items SET obtained = "T" WHERE id = {int(id)}''',)
+    db.commit()
+    #
+    #if id == 1: 
+        #redirect(render_template('apartment.html'))
+    #else:
+         #return(render_template('station.html'))
     return id
     
 #route for the 2nd investigation section
 @app.route('/station')
 def station():
-    return render_template('station.html')
+        db = get_db()
+        #gets all clues the user has unlocked
+        clues = db.execute(f'''SELECT * FROM clues 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #gets all items the user has unlocked
+        items = db.execute(f'''SELECT * FROM items 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #checks if one of 2 clues is found
+        clue1, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 7''',).fetchone()
+        clue2, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 8''',).fetchone()
+        #shows the associated button if one of the clues is found
+        if clue1 == 'T' or clue2 == 'T':
+            showbutton = True
+        else:
+            showbutton = False
+
+        return render_template('station.html', clues=clues, items=items, showbutton=showbutton)
 
 #route for the 3rd investigation section
 @app.route('/alleyway')
 def alleyway():
-    return render_template('alleyway.html')
+        db = get_db()
+        #gets all clues the user has unlocked
+        clues = db.execute(f'''SELECT * FROM clues 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #gets all items the user has unlocked
+        items = db.execute(f'''SELECT * FROM items 
+                                WHERE obtained == 'T'
+                                ORDER BY id ASC''',).fetchall()
+        #checks if one of 2 clues is found
+        clue1, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 7''',).fetchone()
+        clue2, = db.execute(f'''SELECT obtained FROM clues
+                                WHERE id == 8''',).fetchone()
+        #shows the associated button if one of the clues is found
+        if clue1 == 'T' or clue2 == 'T':
+            showbutton = True
+        else:
+            showbutton = False
+
+        return render_template('alleyway.html', clues=clues, items=items, showbutton=showbutton)
 
 
 
