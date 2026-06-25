@@ -32,6 +32,10 @@ def start():
 def tutorial():
       return render_template('tutorial.html')
 
+#sets variable default so they don't reset everytime the page reloads
+safeCode = 'unsolved'
+targetCode = 'unsolved'
+
 #route for the first investigation section        
 @app.route("/apartment", methods=['GET','POST'])
 def apartment():
@@ -54,24 +58,37 @@ def apartment():
             showbutton = True
         else:
             showbutton = False
-        #gets the users answer for the puzzle 
-        safeCode = 'unsolved'
-        targetCode = 'unsolved'
-        if request.method == 'POST':
-            #prevents issues if the puzzle hasn't been answered
-            try:
-                safeCodeGuess = request.form['safe']
-            except:
-                safeCodeGuess = 0
-            try:
-                targetNameGuess = request.form['target']
-            except:
-                targetNameGuess = ''
-            #checks if the answer is correct
-            if safeCodeGuess == 2947:
-                safeCode = 'solved'
-            if targetNameGuess.lower() == 'the commissioner':
-                targetCode = 'solved'
+
+        #checks if the puzzle is solved or not
+        safeCode, = db.execute(f'''SELECT solved FROM puzzles
+                                WHERE id == 1''',).fetchone()
+        targetCode = db.execute(f'''SELECT solved FROM puzzles
+                                WHERE id == 2''',).fetchone()
+        #prevents code from running if the puzzle is already solved
+        if safeCode != 'solved' and targetCode != 'solved':
+            #gets the users answer for the puzzle 
+            if request.method == 'POST':
+                #prevents issues if the puzzle hasn't been answered
+                try:
+                    safeCodeGuess = request.form['safe']
+                    print(safeCodeGuess)
+                    #checks if the answer is correct and updates sql
+                    if int(safeCodeGuess) == 2947:
+                        db.execute(f'''UPDATE puzzles SET solved = 'solved' WHERE id = 1''',)
+                        db.commit()
+                        print('testing')
+                        safeCode = 'solved'
+                except:
+                    safeCodeGuess = 0
+                try:
+                    targetNameGuess = request.form['target']
+                    #checks if the answer is correct and updates sql
+                    if targetNameGuess.lower() == 'the commissioner':
+                        db.execute(f'''UPDATE puzzles SET solved = 'solved' WHERE id = 2''',)
+                        db.commit()
+                        targetCode = 'solved'
+                except:
+                    targetNameGuess = ''
 
         return render_template('apartment.html', clues=clues, items=items, showbutton=showbutton, safeCode=safeCode, targetCode=targetCode)
 
@@ -84,8 +101,9 @@ def processClue():
     #updates SQL
     db.execute(f'''UPDATE clues SET obtained = "T" WHERE id = {int(id)}''',)
     db.commit()
-    redirect(render_template('apartment.html'))
-    return id
+    d = open('static/dialogue/apartment-dialogue-clues.txt').read()
+    
+    return d
 
 #updates SQL to say an item is obtained when the user clicks/obtains it
 @app.route('/processItem', methods=['POST'])
@@ -96,11 +114,6 @@ def processItem():
     #updates SQL
     db.execute(f'''UPDATE items SET obtained = "T" WHERE id = {int(id)}''',)
     db.commit()
-    #
-    #if id == 1: 
-        #redirect(render_template('apartment.html'))
-    #else:
-         #return(render_template('station.html'))
     return id
     
 #route for the 2nd investigation section

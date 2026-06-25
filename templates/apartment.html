@@ -69,14 +69,14 @@
         <div id="dialogue-div" class="dialogue-div" style="display:none">
             <image class="character-sprite" src="{{ url_for('static',filename='images/sprites/placeholder-for-testing.webp') }}"></image>
             <div class="dialogue-box">
-                <p class="dialogue-text">"Test"</p>
+                <div id="dialogueText" class="dialogue-text"></div>
                 <button class="next-dialogue-button" onclick="hideDialogue(); location.href='apartment'">></button>
             </div>
         </div>
         <!-- buttons to go to next place -->
         <div class="next-buttons">
-            <button id="hidden-button" class="next-location-button" onclick="location.href='station'" style="display:none">Warn the target</button>
-            <button class="next-location-button" onclick="location.href='alleyway'">End Investigation</button>
+            <button id="hidden-button" class="next-location-button" onclick="showTargetForm()" style="display:none">Warn the target</button>
+            <button class="next-location-button" onclick="location.href='alleyway'"></button>
         </div>
 
         <!-- shows the 'warn the target' button if one of the correlating clues has been found -->
@@ -84,13 +84,11 @@
             <script>document.getElementById("hidden-button").style.display = "block";</script>
         {% endif %}
         
-        {% if targetCode == 'solved' %}
-            <p>testing</p>
-        {% endif %}
 
         <!-- form for safe puzzle -->
         <div class="form safe-form" id="safe-form" style="display:none">
             <form method="post">
+                <label>Safe code: </label>
                 <input type="number" name="safe" required>
                 <button type="submit">Enter code</button>
             </form>
@@ -99,8 +97,9 @@
         <!-- form for target puzzle -->
         <div class="form target-form" id="target-form" style="display:none">
             <form method="post">
-                <input type="text" name="target" required>
-                <button type="submit">Enter target</button>
+                <label class="target-form-label">Target:</label>
+                <input class="target-form-input" type="text" name="target" required>
+                <button class="target-form-button" type="submit">Warn target</button>
             </form>
         </div>
     
@@ -184,9 +183,23 @@
             $.ajax({
                 url: '/processItem',
                 type: 'POST',
+                dataType: "text",
                 data: { 'data': num },
+                success: function(response) {
+                    document.getElementById("dialogueText").innerHMTL = response;
+                    document.getElementById("dialogue-div").style.backgroundColor = "red";
+
+                },
+                error: function(response) {
+                    document.getElementById("dialogueText").innerHTML = response;
+                    document.getElementById("dialogue-div").style.backgroundColor = "blue";
+                },
+
+                
+
             });
 
+            document.getElementById("dialogueText").innerHMTL = response;
         }
         
 

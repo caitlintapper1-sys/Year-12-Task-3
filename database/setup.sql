@@ -13,3 +13,13 @@ image_path TEXT NOT NULL,
 obtained TEXT DEFAULT 'F'
 );
 
+CREATE TABLE IF NOT EXISTS puzzles (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+solved TEXT DEFAULT 'unsolved'
+);
+
+CREATE TABLE IF NOT EXISTS dialogue (
+show TEXT DEFAULT 'no',
+dialoguecontent TEXT
+);
